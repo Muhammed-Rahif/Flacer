@@ -1,8 +1,36 @@
 import 'package:flacer/info/memory_info.dart';
 import 'package:flutter/material.dart';
+import 'package:yaru/yaru.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+class AppTheme {
+  static YaruThemeData of(BuildContext context) {
+    return SharedAppData.getValue(
+      context,
+      'theme',
+      () => const YaruThemeData(),
+    );
+  }
+
+  static void apply(
+    BuildContext context, {
+    YaruVariant? variant,
+    bool? highContrast,
+    ThemeMode? themeMode,
+  }) {
+    SharedAppData.setValue(
+      context,
+      'theme',
+      AppTheme.of(context).copyWith(
+        themeMode: themeMode,
+        variant: variant,
+        highContrast: highContrast,
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -10,27 +38,35 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return YaruTheme(
+      data: const YaruThemeData(
         useMaterial3: true,
+        themeMode: ThemeMode.system,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      builder: (context, yaru, child) {
+        return MaterialApp(
+          theme: yaru.theme,
+          title: 'Flacer',
+          home: Builder(
+            builder: (context) => YaruTheme(
+              data: AppTheme.of(context),
+              child: const HomePage(),
+            ),
+          ),
+        );
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   String _memoryTotal = "No info!";
 
   /* https://access.redhat.com/solutions/406773
@@ -73,8 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: const Text("Home Page"),
       ),
       body: Center(
         child: Column(
