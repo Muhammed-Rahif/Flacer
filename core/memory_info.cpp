@@ -60,6 +60,30 @@ extern "C"
         return getMeminfoValue("MemTotal:");
     }
 
+    // Function to get Buffers
+    long getBuffers()
+    {
+        return getMeminfoValue("Buffers:");
+    }
+
+    // Function to get Cached
+    long getCached()
+    {
+        return getMeminfoValue("Cached:");
+    }
+
+    // Function to get Shmem
+    long getShmem()
+    {
+        return getMeminfoValue("Shmem:");
+    }
+
+    // Function to get SReclaimable
+    long getSReclaimable()
+    {
+        return getMeminfoValue("SReclaimable:");
+    }
+
 } // extern "C"
 
 int main()
@@ -70,6 +94,10 @@ int main()
     std::cout << "Memory Used: " << getMemoryUsed() << " kB\n";
     std::cout << "Memory Free: " << getMemoryFree() << " kB\n";
     std::cout << "Memory Total: " << getMemoryTotal() << " kB\n";
+    std::cout << "Buffers: " << getBuffers() << " kB\n";
+    std::cout << "Cached: " << getCached() << " kB\n";
+    std::cout << "Shmem: " << getShmem() << " kB\n";
+    std::cout << "SReclaimable: " << getSReclaimable() << " kB\n";
 
     return 0;
 }

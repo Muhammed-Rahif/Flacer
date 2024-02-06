@@ -31,13 +31,41 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _memoryTotal = "Memory total: 0";
+  String _memoryTotal = "No info!";
+
+  /* https://access.redhat.com/solutions/406773
+  *
+  * https://stackoverflow.com/questions/41224738/
+  *   Total used memory = MemTotal - MemFree
+  *   Non cache/buffer memory (green) = Total used memory - (Buffers + Cached memory)
+  *   Buffers (blue) = Buffers
+  *   Cached memory (yellow) = Cached + SReclaimable - Shmem
+  *   Swap = SwapTotal - SwapFree
+  *
+  * Meaning:
+  *   cached = (cached + sreclaimable - shmem);
+  *   memUsed = (memTotal - (memFree + buffers + cached));
+  *   swapUsed = (swapTotal - swapFree);
+  */
 
   void _onBtnClick() {
-    final memoryUsage = getMemoryTotal();
+    final memoryTotal = MemoryInfo.getMemoryTotal();
+    final memoryFree = MemoryInfo.getMemoryFree();
+    final memoryCached = MemoryInfo.getCached();
+    final memoryBuffers = MemoryInfo.getBuffers();
+
+    final actualMemoryUsed =
+        memoryTotal - (memoryFree + memoryBuffers + memoryCached);
+
+    print('Memory Total: $memoryTotal');
+    print('Memory Free: $memoryFree');
+    print('Memory Cached: $memoryCached');
+    print('Memory Buffers: $memoryBuffers');
+    print('Memory Used: $actualMemoryUsed');
 
     setState(() {
-      _memoryTotal = 'Memory total: $memoryUsage%';
+      _memoryTotal =
+          'Memory used: ${actualMemoryUsed ~/ 1024} MB, ${((actualMemoryUsed / memoryTotal) * 100).toInt()}%';
     });
   }
 
@@ -53,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have total memory:',
+              'You have:',
             ),
             Text(
               _memoryTotal,

@@ -1,1 +1,1 @@
-g++ -shared -o core/memory_info.so memory_info 
+g++ -shared -o core/memory_info.so core/memory_info.cpp -fPIC
