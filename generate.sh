@@ -1,0 +1,1 @@
+g++ -shared -o core/memory_info.so memory_info 
