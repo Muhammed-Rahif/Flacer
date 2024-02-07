@@ -50,10 +50,7 @@ class App extends StatelessWidget {
         pageBuilder: (context, index) {
           Widget routePage = AppRoutesConfig.routePages.values.elementAt(index);
 
-          return YaruDetailPage(
-            appBar: YaruWindowTitleBar(title: routePage),
-            body: Center(child: routePage),
-          );
+          return routePage;
         },
       ),
     );
