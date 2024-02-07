@@ -26,13 +26,16 @@ class _AnimatedCountState extends AnimatedWidgetBaseState<AnimatedCount> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.count is int
-        ? Text(
-            '${widget.prefix}${_intCount.evaluate(animation).toString()}${widget.suffix}',
-          )
-        : Text(
-            '${widget.prefix}${_doubleCount.evaluate(animation).toStringAsFixed(1)}${widget.suffix}',
-          );
+    final String text;
+    if (widget.count is int) {
+      final countStr = _intCount.evaluate(animation).toString();
+      text = '${widget.prefix}$countStr${widget.suffix}';
+    } else {
+      final countStr = _doubleCount.evaluate(animation).toStringAsFixed(1);
+      text = '${widget.prefix}$countStr${widget.suffix}';
+    }
+
+    return Text(text);
   }
 
   @override
