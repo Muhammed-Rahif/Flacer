@@ -1,36 +1,13 @@
-import 'package:flacer/info/memory_info.dart';
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
+import 'package:yaru_icons/yaru_icons.dart';
+import 'package:yaru_widgets/yaru_widgets.dart';
 
-void main() {
+void main() async {
+  await YaruWindow.ensureInitialized();
+  await YaruWindowTitleBar.ensureInitialized();
+
   runApp(const MyApp());
-}
-
-class AppTheme {
-  static YaruThemeData of(BuildContext context) {
-    return SharedAppData.getValue(
-      context,
-      'theme',
-      () => const YaruThemeData(),
-    );
-  }
-
-  static void apply(
-    BuildContext context, {
-    YaruVariant? variant,
-    bool? highContrast,
-    ThemeMode? themeMode,
-  }) {
-    SharedAppData.setValue(
-      context,
-      'theme',
-      AppTheme.of(context).copyWith(
-        themeMode: themeMode,
-        variant: variant,
-        highContrast: highContrast,
-      ),
-    );
-  }
 }
 
 class MyApp extends StatelessWidget {
@@ -39,96 +16,60 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return YaruTheme(
-      data: const YaruThemeData(
-        useMaterial3: true,
-        themeMode: ThemeMode.system,
-      ),
       builder: (context, yaru, child) {
         return MaterialApp(
           theme: yaru.theme,
-          title: 'Flacer',
-          home: Builder(
-            builder: (context) => YaruTheme(
-              data: AppTheme.of(context),
-              child: const HomePage(),
-            ),
-          ),
+          darkTheme: yaru.darkTheme,
+          home: const HomePage(),
         );
       },
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  String _memoryTotal = "No info!";
-
-  /* https://access.redhat.com/solutions/406773
-  *
-  * https://stackoverflow.com/questions/41224738/
-  *   Total used memory = MemTotal - MemFree
-  *   Non cache/buffer memory (green) = Total used memory - (Buffers + Cached memory)
-  *   Buffers (blue) = Buffers
-  *   Cached memory (yellow) = Cached + SReclaimable - Shmem
-  *   Swap = SwapTotal - SwapFree
-  *
-  * Meaning:
-  *   cached = (cached + sreclaimable - shmem);
-  *   memUsed = (memTotal - (memFree + buffers + cached));
-  *   swapUsed = (swapTotal - swapFree);
-  */
-
-  void _onBtnClick() {
-    final memoryTotal = MemoryInfo.getMemoryTotal();
-    final memoryFree = MemoryInfo.getMemoryFree();
-    final memoryCached = MemoryInfo.getCached();
-    final memoryBuffers = MemoryInfo.getBuffers();
-
-    final actualMemoryUsed =
-        memoryTotal - (memoryFree + memoryBuffers + memoryCached);
-
-    print('Memory Total: $memoryTotal');
-    print('Memory Free: $memoryFree');
-    print('Memory Cached: $memoryCached');
-    print('Memory Buffers: $memoryBuffers');
-    print('Memory Used: $actualMemoryUsed');
-
-    setState(() {
-      _memoryTotal =
-          'Memory used: ${actualMemoryUsed ~/ 1024} MB, ${((actualMemoryUsed / memoryTotal) * 100).toInt()}%';
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Home Page"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have:',
-            ),
-            Text(
-              _memoryTotal,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _onBtnClick,
-        tooltip: 'Memory Info',
-        child: const Icon(Icons.info),
+      body: YaruMasterDetailPage(
+        length: 2,
+        appBar: const YaruWindowTitleBar(),
+        tileBuilder: (context, index, selected, _) {
+          if (index == 0) {
+            return const YaruMasterTile(
+              leading: Icon(YaruIcons.ubuntu_logo),
+              title: Text('Page 1'),
+            );
+          } else {
+            return const YaruMasterTile(
+              leading: Icon(YaruIcons.colors),
+              title: Text('Page 2'),
+            );
+          }
+        },
+        pageBuilder: (context, index) {
+          if (index == 0) {
+            return const YaruDetailPage(
+              appBar: YaruWindowTitleBar(
+                title: Text('Page 1'),
+              ),
+              body: Center(
+                child: Text('Hello Ubuntu'),
+              ),
+            );
+          } else {
+            return const YaruDetailPage(
+              appBar: YaruWindowTitleBar(
+                title: Text('Page 2'),
+              ),
+              body: Center(
+                child: Text('Hello Yaru'),
+              ),
+            );
+          }
+        },
       ),
     );
   }
