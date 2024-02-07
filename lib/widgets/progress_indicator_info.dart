@@ -2,17 +2,64 @@ import 'package:flacer/utils/arc_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
 
-class ProgressIndicatorInfo extends StatelessWidget {
+class ProgressIndicatorInfo extends StatefulWidget {
   const ProgressIndicatorInfo({
-    super.key,
-    required this.textCenter,
-    required this.textBottom,
+    Key? key,
+    required this.child,
+    required this.header,
     required this.value,
-  });
+  }) : super(key: key);
 
-  final String textCenter;
-  final String textBottom;
+  final Widget child;
+  final Widget header;
   final double value;
+
+  @override
+  ProgressIndicatorInfoState createState() => ProgressIndicatorInfoState();
+}
+
+class ProgressIndicatorInfoState extends State<ProgressIndicatorInfo>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _animation = Tween<double>(begin: 0, end: widget.value).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.linear,
+      ),
+    );
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(ProgressIndicatorInfo oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      _animation =
+          Tween<double>(begin: oldWidget.value, end: widget.value).animate(
+        CurvedAnimation(
+          parent: _animationController,
+          curve: Curves.linear,
+        ),
+      );
+      _animationController.reset();
+      _animationController.forward();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,24 +72,26 @@ class ProgressIndicatorInfo extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: CustomPaint(
-                painter: ArcPainter(
-                  progressColor: progressColor,
-                  trackColor: trackColor,
-                  value: value,
-                ),
-                child: const AspectRatio(
-                  aspectRatio: 2,
-                  child: SizedBox(),
-                ),
-              ),
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: ArcPainter(
+                    progressColor: progressColor,
+                    trackColor: trackColor,
+                    animation: _animation,
+                  ),
+                  child: const AspectRatio(
+                    aspectRatio: 2.5,
+                    child: SizedBox(),
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(height: 8),
-          Text(textCenter),
-          Text(textBottom),
+          widget.header,
+          widget.child,
         ],
       ),
     );

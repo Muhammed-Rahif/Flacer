@@ -6,12 +6,12 @@ class ArcPainter extends CustomPainter {
   ArcPainter({
     required this.progressColor,
     required this.trackColor,
-    required this.value,
-  });
+    required this.animation,
+  }) : super(repaint: animation);
 
   Color progressColor;
   Color trackColor;
-  double value;
+  Animation<double> animation;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -30,7 +30,8 @@ class ArcPainter extends CustomPainter {
     const swapDeg = (210) * pi / 180;
 
     canvas.drawArc(arcRect, startDeg, swapDeg, false, progressCircle);
-    canvas.drawArc(arcRect, startDeg, swapDeg * value, false, bgCircle);
+    canvas.drawArc(
+        arcRect, startDeg, swapDeg * animation.value, false, bgCircle);
   }
 
   @override
