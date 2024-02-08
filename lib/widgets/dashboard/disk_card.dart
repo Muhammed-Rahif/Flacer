@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flacer/core/cpu_info.dart';
 import 'package:flacer/widgets/animated_count.dart';
 import 'package:flacer/widgets/progress_indicator_info.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ class DiskCard extends StatefulWidget {
 
 class _DiskCardState extends State<DiskCard> {
   int cpuUsagePercentage = 0;
-  final int coreCount = CpuInfo.coreCount;
 
   // All the memory values are in KB (convert it to MB using ~/ 1024)
   void setCpuValues() {
