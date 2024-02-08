@@ -1,9 +1,15 @@
 import 'dart:ffi'; // Import Dart FFI library
 import 'dart:io'; // Import 'dart:io' for platform-specific functionality
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path; // Import 'path' from 'path' package
 
 // Path to the 'memory_info.so' file
-String pathMemInfo = path.join(Directory.current.path, 'core/memory_info.so');
+String pathMemInfo = kDebugMode
+    ? path.join(Directory.current.path, 'core/memory_info.so')
+    : path.join(
+        Directory.current.path,
+        'data/flutter_assets/core/memory_info.so',
+      );
 
 // Load the shared library from 'memory_info.so' file
 DynamicLibrary dylib = DynamicLibrary.open(pathMemInfo);

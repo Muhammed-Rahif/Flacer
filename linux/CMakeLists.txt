@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+project(flacer)
+
 set(BINARY_NAME "flacer")
 set(APPLICATION_ID "com.example.flacer")
 
