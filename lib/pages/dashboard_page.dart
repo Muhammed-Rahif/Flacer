@@ -1,9 +1,4 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:math';
-
-import 'package:flacer/core/memory_info.dart';
-import 'package:flacer/widgets/animated_count.dart';
+import 'package:flacer/widgets/dashboard/memory_card.dart';
 import 'package:flacer/widgets/progress_indicator_info.dart';
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
@@ -17,23 +12,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  double memoryUsagePercentage = 0.0;
-
-  @override
-  void initState() {
-    Timer.periodic(const Duration(milliseconds: 500), (_) {
-      if (!mounted) return;
-      final memoryUsed = MemoryInfo.getMemoryUsed();
-      final memoryTotal = MemoryInfo.getMemoryTotal();
-
-      setState(() {
-        memoryUsagePercentage = memoryUsed / memoryTotal;
-      });
-    });
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return YaruDetailPage(
@@ -43,22 +21,7 @@ class _DashboardPageState extends State<DashboardPage> {
           Flexible(
             child: Row(
               children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: ProgressIndicatorInfo(
-                    header: Text(
-                      'MEMORY',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    value: memoryUsagePercentage,
-                    child: AnimatedCount(
-                      count: memoryUsagePercentage,
-                      suffix: "%",
-                    ),
-                  ),
-                ),
+                const Flexible(fit: FlexFit.tight, child: MemoryCard()),
                 Flexible(
                   fit: FlexFit.tight,
                   child: ProgressIndicatorInfo(
@@ -68,7 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    value: memoryUsagePercentage,
+                    value: 0.2,
                     child: const Text('6GB/12GB'),
                   ),
                 ),
@@ -81,7 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    value: memoryUsagePercentage,
+                    value: 0.2,
                     child: const Text('53GB/128GB'),
                   ),
                 ),

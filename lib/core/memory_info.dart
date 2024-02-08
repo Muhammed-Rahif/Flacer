@@ -20,7 +20,7 @@ typedef DartConvertType = int
     Function(); // Define typedef for Dart function which is the converted type in Dart
 
 class MemoryInfo {
-  static int getMemoryTotal() {
+  static int get memoryTotal {
     // Look up the C function for 'getMemoryTotal' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getMemoryTotal');
@@ -28,7 +28,7 @@ class MemoryInfo {
     return lookedUpFunction();
   }
 
-  static int getMemoryFree() {
+  static int get memoryFree {
     // Look up the C function for 'getMemoryFree' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getMemoryFree');
@@ -36,7 +36,7 @@ class MemoryInfo {
     return lookedUpFunction();
   }
 
-  static int getMemoryUsed() {
+  static int get memoryUsed {
     // Look up the C function for 'getMemoryUsed' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getMemoryUsed');
@@ -44,7 +44,7 @@ class MemoryInfo {
     return lookedUpFunction();
   }
 
-  static int getSwapTotal() {
+  static int get swapTotal {
     // Look up the C function for 'getSwapTotal' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getSwapTotal');
@@ -52,7 +52,7 @@ class MemoryInfo {
     return lookedUpFunction();
   }
 
-  static int getSwapFree() {
+  static int get swapFree {
     // Look up the C function for 'getSwapFree' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getSwapFree');
@@ -60,7 +60,7 @@ class MemoryInfo {
     return lookedUpFunction();
   }
 
-  static int getSwapUsed() {
+  static int get swapUsed {
     // Look up the C function for 'getSwapUsed' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getSwapUsed');
@@ -68,7 +68,7 @@ class MemoryInfo {
     return lookedUpFunction();
   }
 
-  static int getBuffers() {
+  static int get buffers {
     // Look up the C function for 'getBuffers' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getBuffers');
@@ -76,7 +76,7 @@ class MemoryInfo {
     return lookedUpFunction();
   }
 
-  static int getCached() {
+  static int get cached {
     // Look up the C function for 'getCached' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getCached');
@@ -84,7 +84,7 @@ class MemoryInfo {
     return lookedUpFunction();
   }
 
-  static int getShmem() {
+  static int get shmem {
     // Look up the C function for 'getShmem' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getShmem');
@@ -92,7 +92,7 @@ class MemoryInfo {
     return lookedUpFunction();
   }
 
-  static int getSReclaimable() {
+  static int get sReclaimable {
     // Look up the C function for 'getSReclaimable' function
     final DartConvertType lookedUpFunction =
         dylib.lookupFunction<CReturnType, DartConvertType>('getSReclaimable');

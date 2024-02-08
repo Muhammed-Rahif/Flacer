@@ -4,6 +4,7 @@ class AnimatedCount extends ImplicitlyAnimatedWidget {
   const AnimatedCount({
     Key? key,
     required this.count,
+    this.style,
     Duration duration = const Duration(milliseconds: 600),
     Curve curve = Curves.fastOutSlowIn,
     this.prefix = '',
@@ -13,6 +14,7 @@ class AnimatedCount extends ImplicitlyAnimatedWidget {
   final num count;
   final String prefix;
   final String suffix;
+  final TextStyle? style;
 
   @override
   ImplicitlyAnimatedWidgetState<ImplicitlyAnimatedWidget> createState() {
@@ -35,7 +37,7 @@ class _AnimatedCountState extends AnimatedWidgetBaseState<AnimatedCount> {
       text = '${widget.prefix}$countStr${widget.suffix}';
     }
 
-    return Text(text);
+    return Text(text, style: widget.style);
   }
 
   @override
