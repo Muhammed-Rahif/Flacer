@@ -1,5 +1,6 @@
+import 'package:flacer/widgets/dashboard/cpu_card.dart';
+import 'package:flacer/widgets/dashboard/disk_card.dart';
 import 'package:flacer/widgets/dashboard/memory_card.dart';
-import 'package:flacer/widgets/progress_indicator_info.dart';
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
@@ -18,37 +19,16 @@ class _DashboardPageState extends State<DashboardPage> {
       appBar: const YaruWindowTitleBar(title: Text('Dashboard')),
       body: Column(
         children: [
-          Flexible(
-            child: Row(
-              children: [
-                const Flexible(fit: FlexFit.tight, child: MemoryCard()),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: ProgressIndicatorInfo(
-                    header: Text(
-                      'CPU',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    value: 0.2,
-                    child: const Text('6GB/12GB'),
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: ProgressIndicatorInfo(
-                    header: Text(
-                      'DISK',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    value: 0.2,
-                    child: const Text('53GB/128GB'),
-                  ),
-                ),
-              ],
+          const Flexible(
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Flexible(fit: FlexFit.tight, child: CpuCard()),
+                  Flexible(fit: FlexFit.tight, child: MemoryCard()),
+                  Flexible(fit: FlexFit.tight, child: DiskCard()),
+                ],
+              ),
             ),
           ),
           Flexible(

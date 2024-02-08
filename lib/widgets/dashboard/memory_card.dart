@@ -15,10 +15,10 @@ class MemoryCard extends StatefulWidget {
 class _MemoryCardState extends State<MemoryCard> {
   int cached = 0;
   int memoryTotal = 0;
-  int buffer = 0;
+  int buffers = 0;
   int memoryFree = 0;
   int memoryUsagePercentage = 0;
-  int actualMemoryUsed = 0;
+  int memoryUsed = 0;
 
 /* https://access.redhat.com/solutions/406773
  *
@@ -38,15 +38,16 @@ class _MemoryCardState extends State<MemoryCard> {
 
   // All the memory values are in KB (convert it to MB using ~/ 1024)
   void setMemoryValues() {
-    cached = MemoryInfo.cached ~/ 1024;
     memoryTotal = MemoryInfo.memoryTotal ~/ 1024;
-    buffer = MemoryInfo.buffers ~/ 1024;
+    buffers = MemoryInfo.buffers ~/ 1024;
     memoryFree = MemoryInfo.memoryFree ~/ 1024;
-    memoryUsagePercentage =
-        ((actualMemoryUsed / (MemoryInfo.memoryTotal ~/ 1024)) * 100).toInt();
-    actualMemoryUsed = (MemoryInfo.memoryTotal -
-            (MemoryInfo.memoryFree + MemoryInfo.buffers + MemoryInfo.cached)) ~/
-        1024;
+    cached =
+        ((MemoryInfo.cached + MemoryInfo.sReclaimable) - MemoryInfo.shmem) ~/
+            1024;
+
+    memoryUsed = memoryTotal - (memoryFree + buffers + cached);
+
+    memoryUsagePercentage = ((memoryUsed / (memoryTotal)) * 100).toInt();
   }
 
   @override
@@ -79,27 +80,27 @@ class _MemoryCardState extends State<MemoryCard> {
     final captionMd = Theme.of(context).textTheme.bodyMedium;
     final usageOutOfGB = 'GB/${(memoryTotal / 1024).toStringAsFixed(1)}GB';
 
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: Card(
-        elevation: 2,
-        child: ProgressIndicatorInfo(
-          header: Text('MEMORY', style: titleMd),
-          value: memoryUsagePercentage / 100,
-          child: Column(
-            children: [
-              AnimatedCount(
-                count: memoryUsagePercentage,
-                suffix: "%",
-                style: headlineMd,
-              ),
-              AnimatedCount(
-                count: (actualMemoryUsed / 1024),
+    return Card(
+      elevation: 2,
+      child: ProgressIndicatorInfo(
+        header: Text('MEMORY', style: titleMd),
+        value: memoryUsagePercentage / 100,
+        child: Column(
+          children: [
+            AnimatedCount(
+              count: memoryUsagePercentage,
+              suffix: "%",
+              style: headlineMd,
+            ),
+            Opacity(
+              opacity: .5,
+              child: AnimatedCount(
+                count: (memoryUsed / 1024),
                 suffix: usageOutOfGB,
                 style: captionMd,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

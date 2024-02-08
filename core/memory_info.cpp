@@ -42,12 +42,6 @@ extern "C"
         return getMeminfoValue("SwapTotal:");
     }
 
-    // Function to get Memory used
-    long getMemoryUsed()
-    {
-        return getMeminfoValue("MemTotal:") - getMeminfoValue("MemFree:");
-    }
-
     // Function to get Memory free
     long getMemoryFree()
     {
@@ -91,7 +85,6 @@ int main()
     std::cout << "Swap Used: " << getSwapUsed() << " kB\n";
     std::cout << "Swap Free: " << getSwapFree() << " kB\n";
     std::cout << "Swap Total: " << getSwapTotal() << " kB\n";
-    std::cout << "Memory Used: " << getMemoryUsed() << " kB\n";
     std::cout << "Memory Free: " << getMemoryFree() << " kB\n";
     std::cout << "Memory Total: " << getMemoryTotal() << " kB\n";
     std::cout << "Buffers: " << getBuffers() << " kB\n";

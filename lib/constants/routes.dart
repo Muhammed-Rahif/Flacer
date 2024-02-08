@@ -1,6 +1,6 @@
 import 'package:flacer/pages/apt_repository_manager_page.dart';
 import 'package:flacer/pages/dashboard_page.dart';
-import 'package:flacer/pages/gnome_Settings_page.dart';
+import 'package:flacer/pages/gnome_settings_page.dart';
 import 'package:flacer/pages/helpers_page.dart';
 import 'package:flacer/pages/processes_page.dart';
 import 'package:flacer/pages/resources_page.dart';
