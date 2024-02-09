@@ -18,7 +18,7 @@ class _CpuCardState extends State<CpuCard> {
 
   // All the memory values are in KB (convert it to MB using ~/ 1024)
   void setCpuValues() {
-    cpuUsagePercentage = (CpuInfo.processUsage) ~/ 1;
+    cpuUsagePercentage = CpuInfo.processUsage.round();
   }
 
   @override

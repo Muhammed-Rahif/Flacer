@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flacer/core/disk_info.dart';
 import 'package:flacer/widgets/animated_count.dart';
 import 'package:flacer/widgets/progress_indicator_info.dart';
 import 'package:flutter/material.dart';
@@ -12,26 +13,32 @@ class DiskCard extends StatefulWidget {
 }
 
 class _DiskCardState extends State<DiskCard> {
-  int cpuUsagePercentage = 0;
+  int totalDiskSpace = 0;
+  int usedDiskSpace = 0;
+  int availableDiskSpace = 0;
+  int diskUsagePercentage = 0;
 
-  // All the memory values are in KB (convert it to MB using ~/ 1024)
-  void setCpuValues() {
-    // cpuUsagePercentage = (CpuInfo.processUsage).toInt();
+  // All the memory values are in KB (convert it to GB using ~/ 1024 two times)
+  void setDiskValues() {
+    totalDiskSpace = DiskInfo.totalDiskSpace ~/ 1024 ~/ 1024;
+    usedDiskSpace = DiskInfo.usedDiskSpace ~/ 1024 ~/ 1024;
+    availableDiskSpace = DiskInfo.availableDiskSpace ~/ 1024 ~/ 1024;
+    diskUsagePercentage = (usedDiskSpace / totalDiskSpace * 100).round();
   }
 
   @override
   void initState() {
     // Setting the memory values on the first run
     setState(() {
-      setCpuValues();
+      setDiskValues();
     });
 
-    // Updating the memory values every 500 milliseconds
-    Timer.periodic(const Duration(milliseconds: 500), (_) {
+    // Updating the memory values every 10 seconds
+    Timer.periodic(const Duration(seconds: 10), (_) {
       if (!mounted) return;
 
       setState(() {
-        setCpuValues();
+        setDiskValues();
       });
     });
 
@@ -47,22 +54,23 @@ class _DiskCardState extends State<DiskCard> {
           fontWeight: FontWeight.bold,
         );
     final captionMd = Theme.of(context).textTheme.bodyMedium;
+    final diskInfo = '${usedDiskSpace}GB/${totalDiskSpace}GB';
 
     return Card(
       elevation: 2,
       child: ProgressIndicatorInfo(
         header: Text('DISK', style: titleMd),
-        value: cpuUsagePercentage / 100,
+        value: diskUsagePercentage / 100,
         child: Column(
           children: [
             AnimatedCount(
-              count: cpuUsagePercentage,
+              count: diskUsagePercentage,
               suffix: '%',
               style: headlineMd,
             ),
             Opacity(
               opacity: .5,
-              child: Text('53GB/128GB', style: captionMd),
+              child: Text(diskInfo, style: captionMd),
             ),
           ],
         ),

@@ -14,46 +14,46 @@ String pathMemInfo = kDebugMode
 // Load the shared library from 'memory_info.so' file
 DynamicLibrary dylib = DynamicLibrary.open(pathMemInfo);
 
-typedef CReturnType = Long
+typedef CPPType = Long
     Function(); // Define typedef for C function which is the return type from the C function
-typedef DartConvertType = int
+typedef DartType = int
     Function(); // Define typedef for Dart function which is the converted type in Dart
 
 // Look up the C function for 'getMemoryTotal' function
-final DartConvertType lookedUpGetMemoryTotal =
-    dylib.lookupFunction<CReturnType, DartConvertType>('getMemoryTotal');
+final DartType lookedUpGetMemoryTotal =
+    dylib.lookupFunction<CPPType, DartType>('getMemoryTotal');
 
 // Look up the C function for 'getMemoryFree' function
-final DartConvertType lookedUpGetMemoryFree =
-    dylib.lookupFunction<CReturnType, DartConvertType>('getMemoryFree');
+final DartType lookedUpGetMemoryFree =
+    dylib.lookupFunction<CPPType, DartType>('getMemoryFree');
 
 // Look up the C function for 'getSwapTotal' function
-final DartConvertType lookedUpGetSwapTotal =
-    dylib.lookupFunction<CReturnType, DartConvertType>('getSwapTotal');
+final DartType lookedUpGetSwapTotal =
+    dylib.lookupFunction<CPPType, DartType>('getSwapTotal');
 
 // Look up the C function for 'getSwapFree' function
-final DartConvertType lookedUpGetSwapFree =
-    dylib.lookupFunction<CReturnType, DartConvertType>('getSwapFree');
+final DartType lookedUpGetSwapFree =
+    dylib.lookupFunction<CPPType, DartType>('getSwapFree');
 
 // Look up the C function for 'getSwapUsed' function
-final DartConvertType lookedUpGetSwapUsed =
-    dylib.lookupFunction<CReturnType, DartConvertType>('getSwapUsed');
+final DartType lookedUpGetSwapUsed =
+    dylib.lookupFunction<CPPType, DartType>('getSwapUsed');
 
 // Look up the C function for 'getBuffers' function
-final DartConvertType lookedUpGetBuffers =
-    dylib.lookupFunction<CReturnType, DartConvertType>('getBuffers');
+final DartType lookedUpGetBuffers =
+    dylib.lookupFunction<CPPType, DartType>('getBuffers');
 
 // Look up the C function for 'getCached' function
-final DartConvertType lookedUpGetCached =
-    dylib.lookupFunction<CReturnType, DartConvertType>('getCached');
+final DartType lookedUpGetCached =
+    dylib.lookupFunction<CPPType, DartType>('getCached');
 
 // Look up the C function for 'getShmem' function
-final DartConvertType lookedUpGetShmem =
-    dylib.lookupFunction<CReturnType, DartConvertType>('getShmem');
+final DartType lookedUpGetShmem =
+    dylib.lookupFunction<CPPType, DartType>('getShmem');
 
 // Look up the C function for 'getSReclaimable' function
-final DartConvertType lookedUpGetSReclaimable =
-    dylib.lookupFunction<CReturnType, DartConvertType>('getSReclaimable');
+final DartType lookedUpGetSReclaimable =
+    dylib.lookupFunction<CPPType, DartType>('getSReclaimable');
 
 class MemoryInfo {
   static int get memoryTotal => lookedUpGetMemoryTotal();

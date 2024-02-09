@@ -47,7 +47,7 @@ class _MemoryCardState extends State<MemoryCard> {
 
     memoryUsed = memoryTotal - (memoryFree + buffers + cached);
 
-    memoryUsagePercentage = ((memoryUsed / (memoryTotal)) * 100).toInt();
+    memoryUsagePercentage = ((memoryUsed / (memoryTotal)) * 100).round();
   }
 
   @override
