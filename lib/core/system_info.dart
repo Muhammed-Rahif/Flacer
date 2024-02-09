@@ -43,7 +43,7 @@ final getCPUCoreCount =
 final getCPUSpeed = dylib.lookupFunction<CPPType, DartType>('getCPUSpeed');
 
 class SystemInfo {
-  static String get hostname => getHostname().toString();
+  static String get hostname => getHostname().toDartString();
   static String get platform => getPlatform().toDartString();
   static String get distribution => getDistribution().toDartString();
   static String get kernelRelease => getKernelRelease().toDartString();
