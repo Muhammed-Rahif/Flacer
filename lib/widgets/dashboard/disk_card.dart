@@ -28,6 +28,8 @@ class _DiskCardState extends State<DiskCard> {
 
   @override
   void initState() {
+    super.initState();
+
     // Setting the memory values on the first run
     setState(() {
       setDiskValues();
@@ -41,8 +43,6 @@ class _DiskCardState extends State<DiskCard> {
         setDiskValues();
       });
     });
-
-    super.initState();
   }
 
   @override

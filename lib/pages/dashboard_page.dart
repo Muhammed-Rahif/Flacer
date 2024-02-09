@@ -1,6 +1,7 @@
 import 'package:flacer/widgets/dashboard/cpu_card.dart';
 import 'package:flacer/widgets/dashboard/disk_card.dart';
 import 'package:flacer/widgets/dashboard/memory_card.dart';
+import 'package:flacer/widgets/dashboard/system_info_card.dart';
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
@@ -17,11 +18,11 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return YaruDetailPage(
       appBar: const YaruWindowTitleBar(title: Text('Dashboard')),
-      body: Column(
-        children: [
-          const Flexible(
-            child: Padding(
-              padding: EdgeInsets.all(10),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            const Flexible(
               child: Row(
                 children: [
                   Flexible(fit: FlexFit.tight, child: CpuCard()),
@@ -30,16 +31,17 @@ class _DashboardPageState extends State<DashboardPage> {
                 ],
               ),
             ),
-          ),
-          Flexible(
-            child: Row(
-              children: [
-                Flexible(child: Container(color: YaruColors.lubuntuBlue)),
-                Flexible(child: Container(color: YaruColors.sage)),
-              ],
-            ),
-          )
-        ],
+            const SizedBox(height: 10),
+            Flexible(
+              child: Row(
+                children: [
+                  const Flexible(child: SystemInfoCard()),
+                  Flexible(child: Container()),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

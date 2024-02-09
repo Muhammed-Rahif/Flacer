@@ -27,6 +27,17 @@ class _AnimatedCountState extends AnimatedWidgetBaseState<AnimatedCount> {
   Tween<double> _doubleCount = Tween<double>(begin: 0, end: 1);
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.count is int) {
+      _intCount = IntTween(begin: 0, end: widget.count.toInt());
+    } else {
+      _doubleCount = Tween<double>(begin: 0, end: widget.count.toDouble());
+    }
+    controller.forward();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final String text;
     if (widget.count is int) {

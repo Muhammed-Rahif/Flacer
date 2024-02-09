@@ -14,10 +14,10 @@ extern "C"
     // Function to get the number of CPU cores
     int getCoreCount()
     {
-        std::ifstream cpuinfo("/proc/cpuinfo");
-        std::string line;
+        ifstream cpuinfo("/proc/cpuinfo");
+        string line;
         int coreCount = 0;
-        while (std::getline(cpuinfo, line))
+        while (getline(cpuinfo, line))
         {
             if (line.substr(0, 9) == "processor")
             {
@@ -69,17 +69,17 @@ extern "C"
     // Function to get the total CPU time
     long getTotalCpuTime()
     {
-        std::ifstream stat("/proc/stat");
-        std::string line;
-        if (std::getline(stat, line))
+        ifstream stat("/proc/stat");
+        string line;
+        if (getline(stat, line))
         {
-            std::istringstream iss(line);
-            std::vector<std::string> tokens(std::istream_iterator<std::string>{iss},
-                                            std::istream_iterator<std::string>());
+            istringstream iss(line);
+            vector<string> tokens(istream_iterator<string>{iss},
+                                  istream_iterator<string>());
             long total_time = 0;
             for (size_t i = 1; i < tokens.size(); ++i)
             {
-                total_time += std::stol(tokens[i]);
+                total_time += stol(tokens[i]);
             }
             return total_time;
         }
@@ -87,22 +87,22 @@ extern "C"
     }
 
     // Function to get the percentage of work for each CPU core
-    std::vector<float> getCpuUsagePerCore()
+    vector<float> getCpuUsagePerCore()
     {
-        std::ifstream stat("/proc/stat");
-        std::string line;
-        std::vector<float> cpu_usage;
-        while (std::getline(stat, line))
+        ifstream stat("/proc/stat");
+        string line;
+        vector<float> cpu_usage;
+        while (getline(stat, line))
         {
             if (line.substr(0, 3) == "cpu")
             {
-                std::istringstream iss(line);
-                std::vector<std::string> tokens(std::istream_iterator<std::string>{iss},
-                                                std::istream_iterator<std::string>());
+                istringstream iss(line);
+                vector<string> tokens(istream_iterator<string>{iss},
+                                      istream_iterator<string>());
                 long total_time = 0;
                 for (size_t i = 1; i < tokens.size(); ++i)
                 {
-                    total_time += std::stol(tokens[i]);
+                    total_time += stol(tokens[i]);
                 }
                 float cpu_usage_percentage = (total_time / static_cast<float>(getTotalCpuTime())) * 100.0f;
                 cpu_usage.push_back(cpu_usage_percentage);

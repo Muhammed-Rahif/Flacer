@@ -3,19 +3,21 @@
 #include <string>
 #include <sstream>
 
+using namespace std;
+
 extern "C"
 {
 
     // Function to read a specific field from /proc/meminfo
-    long getMeminfoValue(const std::string &field)
+    long getMeminfoValue(const string &field)
     {
-        std::ifstream meminfo("/proc/meminfo");
-        std::string line;
-        while (std::getline(meminfo, line))
+        ifstream meminfo("/proc/meminfo");
+        string line;
+        while (getline(meminfo, line))
         {
             if (line.substr(0, field.size()) == field)
             {
-                std::istringstream iss(line.substr(field.size()));
+                istringstream iss(line.substr(field.size()));
                 long value;
                 iss >> value;
                 return value;
@@ -82,15 +84,15 @@ extern "C"
 
 int main()
 {
-    std::cout << "Swap Used: " << getSwapUsed() << " kB\n";
-    std::cout << "Swap Free: " << getSwapFree() << " kB\n";
-    std::cout << "Swap Total: " << getSwapTotal() << " kB\n";
-    std::cout << "Memory Free: " << getMemoryFree() << " kB\n";
-    std::cout << "Memory Total: " << getMemoryTotal() << " kB\n";
-    std::cout << "Buffers: " << getBuffers() << " kB\n";
-    std::cout << "Cached: " << getCached() << " kB\n";
-    std::cout << "Shmem: " << getShmem() << " kB\n";
-    std::cout << "SReclaimable: " << getSReclaimable() << " kB\n";
+    cout << "Swap Used: " << getSwapUsed() << " kB\n";
+    cout << "Swap Free: " << getSwapFree() << " kB\n";
+    cout << "Swap Total: " << getSwapTotal() << " kB\n";
+    cout << "Memory Free: " << getMemoryFree() << " kB\n";
+    cout << "Memory Total: " << getMemoryTotal() << " kB\n";
+    cout << "Buffers: " << getBuffers() << " kB\n";
+    cout << "Cached: " << getCached() << " kB\n";
+    cout << "Shmem: " << getShmem() << " kB\n";
+    cout << "SReclaimable: " << getSReclaimable() << " kB\n";
 
     return 0;
 }
