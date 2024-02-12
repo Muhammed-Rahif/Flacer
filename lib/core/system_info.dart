@@ -41,6 +41,7 @@ class SystemInfo {
   static int get coreCount =>
       int.parse(Process.runSync('nproc', ['--all']).stdout.toString().trim());
 
+  // https://askubuntu.com/questions/218567/any-way-to-check-the-clock-speed-of-my-processor
   static String get cpuSpeed {
     var result = Process.runSync(
         "sh", ["-c", r"lscpu | sed -nr '/CPU max MHz/ s/.*:\s*(.*)/\1/p'"]);

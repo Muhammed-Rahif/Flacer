@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flacer/utils/strings.dart';
+import 'package:flutter/foundation.dart';
 
 class CpuInfo {
   static final File _meminfo = File("/proc/meminfo");
@@ -65,7 +66,9 @@ class CpuInfo {
 
       return usage;
     } catch (e) {
-      print("Error: $e");
+      if (kDebugMode) {
+        print("Error: $e");
+      }
       return -1;
     }
   }

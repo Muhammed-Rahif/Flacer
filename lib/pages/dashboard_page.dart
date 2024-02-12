@@ -3,7 +3,6 @@ import 'package:flacer/widgets/dashboard/disk_card.dart';
 import 'package:flacer/widgets/dashboard/memory_card.dart';
 import 'package:flacer/widgets/dashboard/system_info_card.dart';
 import 'package:flutter/material.dart';
-import 'package:yaru/yaru.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
 class DashboardPage extends StatefulWidget {

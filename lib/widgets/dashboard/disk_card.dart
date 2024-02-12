@@ -70,7 +70,11 @@ class _DiskCardState extends State<DiskCard> {
             ),
             Opacity(
               opacity: .5,
-              child: Text(diskInfo, style: captionMd),
+              child: AnimatedCount(
+                count: usedDiskSpace,
+                suffix: 'GB/${totalDiskSpace}GB',
+                style: captionMd,
+              ),
             ),
           ],
         ),
