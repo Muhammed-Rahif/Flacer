@@ -17,8 +17,9 @@ class _CpuCardState extends State<CpuCard> {
   final int coreCount = CpuInfo.coreCount;
 
   // All the memory values are in KB (convert it to MB using ~/ 1024)
-  void setCpuValues() {
-    cpuUsagePercentage = CpuInfo.processUsage.round();
+  void setCpuValues() async {
+    final cpuUsage = await CpuInfo.processCpuUsage;
+    cpuUsagePercentage = cpuUsage.round();
   }
 
   @override

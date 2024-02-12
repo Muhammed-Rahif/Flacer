@@ -19,7 +19,7 @@ class _DiskCardState extends State<DiskCard> {
   int diskUsagePercentage = 0;
 
   // All the memory values are in KB (convert it to GB using ~/ 1024 two times)
-  void setDiskValues() {
+  void setDiskValues() async {
     totalDiskSpace = DiskInfo.totalDiskSpace ~/ 1024 ~/ 1024;
     usedDiskSpace = DiskInfo.usedDiskSpace ~/ 1024 ~/ 1024;
     availableDiskSpace = DiskInfo.availableDiskSpace ~/ 1024 ~/ 1024;

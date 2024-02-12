@@ -42,7 +42,6 @@ dependencies:
   yaru_window: ^0.2.0
   handy_window: ^0.3.1
   ffi: ^2.1.0
-  ffigen: ^11.0.0
 
 dev_dependencies:
   flutter_test:
@@ -58,11 +57,6 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-ffigen:
-  output: 'generated_bindings.dart'
-  headers:
-    entry-points:
-      - 'core/system_info.cpp'
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -71,10 +65,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-  assets:
-    - core/memory_info.so
-    - core/cpu_info.so
 
   # To add assets to your application, add an assets section, like this:
   # assets:
