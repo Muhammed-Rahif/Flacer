@@ -43,6 +43,14 @@ static void my_application_activate(GApplication *application)
   gtk_window_set_geometry_hints(window, nullptr, &geometry_min, GDK_HINT_MIN_SIZE);
 
   gtk_window_set_default_size(window, 1280, 720);
+  if (g_file_test("assets", G_FILE_TEST_IS_DIR))
+  {
+    gtk_window_set_icon_from_file(window, "assets/logo/logo-64x64.png", NULL); // For debug mode
+  }
+  else
+  {
+    gtk_window_set_icon_from_file(window, "data/flutter_assets/assets/logo/logo-64x64.png", NULL); // For release mode
+  }
   gtk_widget_show(GTK_WIDGET(window));
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
