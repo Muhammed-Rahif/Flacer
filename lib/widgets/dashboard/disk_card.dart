@@ -54,7 +54,6 @@ class _DiskCardState extends State<DiskCard> {
           fontWeight: FontWeight.bold,
         );
     final captionMd = Theme.of(context).textTheme.bodyMedium;
-    final diskInfo = '${usedDiskSpace}GB/${totalDiskSpace}GB';
 
     return Card(
       elevation: 2,

@@ -9,6 +9,7 @@ import 'dart:io';
 // CPU core count
 // CPU speed
 
+// can be used https://pub.dev/packages/system_info2
 class SystemInfo {
   static String get hostName => Platform.localHostname;
 
