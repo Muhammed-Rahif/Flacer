@@ -2,16 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 class NetworkMonitor {
-  late BigInt _initialUploadBytes;
-  late BigInt _initialDownloadBytes;
+  static BigInt _initialUploadBytes = _readStats()[0];
+  static BigInt _initialDownloadBytes = _readStats()[1];
 
-  NetworkMonitor() {
-    // Initialize initial values
-    _initialUploadBytes = _readStats()[0];
-    _initialDownloadBytes = _readStats()[1];
-  }
-
-  Future<List<double>> getInternetSpeed() async {
+  static Future<List<double>> get internetSpeed async {
     // Get current values
     var currentStats = _readStats();
     BigInt currentUploadBytes = currentStats[0];
@@ -19,10 +13,10 @@ class NetworkMonitor {
 
     // Calculate upload and download speeds
     double uploadSpeed = (currentUploadBytes - _initialUploadBytes).toDouble() /
-        1024.0; // Convert to KB
+        1024; // Convert to KB
     double downloadSpeed =
         (currentDownloadBytes - _initialDownloadBytes).toDouble() /
-            1024.0; // Convert to KB
+            1024; // Convert to KB
 
     // Update initial values for next calculation
     _initialUploadBytes = currentUploadBytes;
@@ -31,7 +25,7 @@ class NetworkMonitor {
     return [uploadSpeed, downloadSpeed];
   }
 
-  List<BigInt> _readStats() {
+  static List<BigInt> _readStats() {
     BigInt uploadBytes = BigInt.zero;
     BigInt downloadBytes = BigInt.zero;
 
@@ -43,6 +37,7 @@ class NetworkMonitor {
     for (var line in lines) {
       var parts = line.trim().split(RegExp(r'\s+'));
       if (parts.isNotEmpty) {
+        // ignore: unused_local_variable
         String interface = parts[0].replaceAll(':', '');
 
         BigInt rxBytes = BigInt.tryParse(parts[1]) ?? BigInt.zero;
@@ -58,14 +53,12 @@ class NetworkMonitor {
 }
 
 void main() {
-  NetworkMonitor monitor = NetworkMonitor();
-
   // Update speeds every second
   Timer.periodic(Duration(seconds: 1), (timer) async {
     for (int i = 0; i < stdout.terminalLines; i++) {
       stdout.writeln();
     } // Clear the console
-    var speeds = await monitor.getInternetSpeed();
+    var speeds = await NetworkMonitor.internetSpeed;
     print("Upload Speed: ${speeds[0]} KB/s");
     print("Download Speed: ${speeds[1]} KB/s");
     await Future.delayed(Duration(milliseconds: 100)); // Delay for a short time

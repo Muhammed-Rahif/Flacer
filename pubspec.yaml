@@ -42,6 +42,7 @@ dependencies:
   yaru_window: ^0.2.0
   handy_window: ^0.3.1
   ffi: ^2.1.0
+  fl_chart: ^0.66.2
 
 dev_dependencies:
   flutter_test:
