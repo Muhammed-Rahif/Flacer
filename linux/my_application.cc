@@ -8,18 +8,31 @@
 #include <handy.h>
 
 #include "flutter/generated_plugin_registrant.h"
+#include "flutter_channel.cc"
 
-struct _MyApplication
-{
+struct _MyApplication {
   GtkApplication parent_instance;
   char **dart_entrypoint_arguments;
+  FlMethodChannel *flacer_channel;
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
+static void flacer_method_call_handler(FlMethodChannel *channel,
+                                       FlMethodCall *method_call,
+                                       gpointer user_data) {
+  g_autoptr(FlMethodResponse) response = nullptr;
+
+  response = get_flutter_channel_response(method_call);
+
+  g_autoptr(GError) error = nullptr;
+  if (!fl_method_call_respond(method_call, response, &error)) {
+    g_warning("Failed to send response: %s", error->message);
+  }
+}
+
 // Implements GApplication::activate.
-static void my_application_activate(GApplication *application)
-{
+static void my_application_activate(GApplication *application) {
   MyApplication *self = MY_APPLICATION(application);
 
 #ifdef NDEBUG
@@ -27,8 +40,7 @@ static void my_application_activate(GApplication *application)
   // production/release mode. Allow multiple instances in debug mode for
   // easier debugging and testing.
   GList *windows = gtk_application_get_windows(GTK_APPLICATION(application));
-  if (windows)
-  {
+  if (windows) {
     gtk_window_present(GTK_WINDOW(windows->data));
     return;
   }
@@ -40,21 +52,23 @@ static void my_application_activate(GApplication *application)
   GdkGeometry geometry_min;
   geometry_min.min_width = 860;
   geometry_min.min_height = 600;
-  gtk_window_set_geometry_hints(window, nullptr, &geometry_min, GDK_HINT_MIN_SIZE);
+  gtk_window_set_geometry_hints(window, nullptr, &geometry_min,
+                                GDK_HINT_MIN_SIZE);
 
   gtk_window_set_default_size(window, 1280, 720);
-  if (g_file_test("assets", G_FILE_TEST_IS_DIR))
-  {
-    gtk_window_set_icon_from_file(window, "assets/logo/logo-64x64.png", NULL); // For debug mode
-  }
-  else
-  {
-    gtk_window_set_icon_from_file(window, "data/flutter_assets/assets/logo/logo-64x64.png", NULL); // For release mode
+  if (g_file_test("assets", G_FILE_TEST_IS_DIR)) {
+    gtk_window_set_icon_from_file(window, "assets/logo/logo-64x64.png",
+                                  NULL); // For debug mode
+  } else {
+    gtk_window_set_icon_from_file(
+        window, "data/flutter_assets/assets/logo/logo-64x64.png",
+        NULL); // For release mode
   }
   gtk_widget_show(GTK_WIDGET(window));
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
-  fl_dart_project_set_dart_entrypoint_arguments(project, self->dart_entrypoint_arguments);
+  fl_dart_project_set_dart_entrypoint_arguments(
+      project, self->dart_entrypoint_arguments);
 
   FlView *view = fl_view_new(project);
   gtk_widget_show(GTK_WIDGET(view));
@@ -62,18 +76,25 @@ static void my_application_activate(GApplication *application)
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+  self->flacer_channel = fl_method_channel_new(
+      fl_engine_get_binary_messenger(fl_view_get_engine(view)),
+      "rahif.tech/flacer", FL_METHOD_CODEC(codec));
+  fl_method_channel_set_method_call_handler(
+      self->flacer_channel, flacer_method_call_handler, self, nullptr);
+
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
 
-static gint my_application_command_line(GApplication *application, GApplicationCommandLine *command_line)
-{
+static gint my_application_command_line(GApplication *application,
+                                        GApplicationCommandLine *command_line) {
   MyApplication *self = MY_APPLICATION(application);
-  gchar **arguments = g_application_command_line_get_arguments(command_line, nullptr);
+  gchar **arguments =
+      g_application_command_line_get_arguments(command_line, nullptr);
   self->dart_entrypoint_arguments = g_strdupv(arguments + 1);
 
   g_autoptr(GError) error = nullptr;
-  if (!g_application_register(application, nullptr, &error))
-  {
+  if (!g_application_register(application, nullptr, &error)) {
     g_warning("Failed to register: %s", error->message);
     return 1;
   }
@@ -85,15 +106,14 @@ static gint my_application_command_line(GApplication *application, GApplicationC
 }
 
 // Implements GObject::dispose.
-static void my_application_dispose(GObject *object)
-{
+static void my_application_dispose(GObject *object) {
   MyApplication *self = MY_APPLICATION(object);
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);
+  g_clear_object(&self->flacer_channel);
   G_OBJECT_CLASS(my_application_parent_class)->dispose(object);
 }
 
-static void my_application_class_init(MyApplicationClass *klass)
-{
+static void my_application_class_init(MyApplicationClass *klass) {
   G_APPLICATION_CLASS(klass)->activate = my_application_activate;
   G_APPLICATION_CLASS(klass)->command_line = my_application_command_line;
   G_OBJECT_CLASS(klass)->dispose = my_application_dispose;
@@ -101,8 +121,7 @@ static void my_application_class_init(MyApplicationClass *klass)
 
 static void my_application_init(MyApplication *self) {}
 
-MyApplication *my_application_new()
-{
+MyApplication *my_application_new() {
   return MY_APPLICATION(g_object_new(
       my_application_get_type(), "application-id", APPLICATION_ID, "flags",
       G_APPLICATION_HANDLES_COMMAND_LINE | G_APPLICATION_HANDLES_OPEN,

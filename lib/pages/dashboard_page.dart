@@ -1,3 +1,4 @@
+import 'package:flacer/core/internet_info.dart';
 import 'package:flacer/widgets/dashboard/cpu_card.dart';
 import 'package:flacer/widgets/dashboard/disk_card.dart';
 import 'package:flacer/widgets/dashboard/memory_card.dart';
@@ -15,6 +16,8 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
+    Internet.name.then((value) => print(value));
+
     return YaruDetailPage(
       appBar: const YaruWindowTitleBar(title: Text('Dashboard')),
       body: Padding(

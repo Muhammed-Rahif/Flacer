@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(flacer)
 
 set(BINARY_NAME "flacer")
-set(APPLICATION_ID "com.example.flacer")
+set(APPLICATION_ID "tech.rahif.flacer")
 
 cmake_policy(SET CMP0063 NEW)
 
