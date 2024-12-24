@@ -22,6 +22,8 @@ class NetworkMonitorCard extends StatefulWidget {
   State<NetworkMonitorCard> createState() => _NetworkMonitorCardState();
 }
 
+// TODO: Y axis maximum set dynamically; Total usage of network
+
 class _NetworkMonitorCardState extends State<NetworkMonitorCard> {
   List<Point> uploadPoints = [const Point(0, 0)];
   List<Point> downloadPoints = [const Point(0, 0)];
@@ -31,40 +33,27 @@ class _NetworkMonitorCardState extends State<NetworkMonitorCard> {
   void initState() {
     super.initState();
     Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (!mounted) return;
       final network = await NetworkMonitor.internetSpeed;
       final curntUpload = network.first;
       final curntDownload = network.last;
 
       setState(() {
-        if (!mounted) return;
         uploadPoints.add(Point(x, curntUpload));
         downloadPoints.add(Point(x, curntDownload));
 
         if (uploadPoints.length > 22) uploadPoints.removeAt(0);
         if (downloadPoints.length > 22) downloadPoints.removeAt(0);
 
-        x += 0.5;
+        x += 1;
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1.70,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: 18,
-              left: 12,
-              top: 24,
-              bottom: 12,
-            ),
-            child: LineChart(mainData()),
-          ),
-        ),
-      ],
+    return Expanded(
+      child: LineChart(mainData()),
     );
   }
 
@@ -81,17 +70,17 @@ class _NetworkMonitorCardState extends State<NetworkMonitorCard> {
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
-        horizontalInterval: 1024, // 1KB
+        horizontalInterval: 1024 / 2, // 0.5MB
         verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
-          return const FlLine(
-            color: YaruColors.orange,
+          return FlLine(
+            color: YaruColors.orange.withOpacity(0.5),
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
-          return const FlLine(
-            color: YaruColors.orange,
+          return FlLine(
+            color: YaruColors.orange.withOpacity(0.5),
             strokeWidth: 1,
           );
         },
@@ -102,7 +91,7 @@ class _NetworkMonitorCardState extends State<NetworkMonitorCard> {
         topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
           axisNameWidget: Text(
-              "Download ${downloadPoints.last.y.toStringAsFixed(0)}KB/s, Upload ${uploadPoints.last.y.toStringAsFixed(0)}KB/s"),
+              "Receive ${downloadPoints.last.y.toStringAsFixed(0)}KB/s, Send ${uploadPoints.last.y.toStringAsFixed(0)}KB/s"),
           axisNameSize: 26,
         ),
         rightTitles: AxisTitles(
@@ -116,10 +105,10 @@ class _NetworkMonitorCardState extends State<NetworkMonitorCard> {
       ),
       borderData: FlBorderData(
         show: true,
-        border: Border.all(color: YaruColors.coolGrey),
+        border: Border.all(color: YaruColors.orange, width: 2),
       ),
-      minX: x - 11,
-      maxX: x - .5,
+      minX: x - 22,
+      maxX: x - 1,
       minY: 0,
       maxY: 2 * 1024, // 6MB
       lineBarsData: [
@@ -128,8 +117,9 @@ class _NetworkMonitorCardState extends State<NetworkMonitorCard> {
               .map((p) => FlSpot(p.x.toDouble(), p.y.toDouble()))
               .toList(),
           isCurved: true,
+          preventCurveOverShooting: true,
           gradient: LinearGradient(colors: uploadGradientColors),
-          barWidth: 3,
+          barWidth: 2,
           isStrokeCapRound: true,
           dotData: const FlDotData(show: false),
           belowBarData: BarAreaData(
@@ -146,8 +136,9 @@ class _NetworkMonitorCardState extends State<NetworkMonitorCard> {
               .map((p) => FlSpot(p.x.toDouble(), p.y.toDouble()))
               .toList(),
           isCurved: true,
+          preventCurveOverShooting: true,
           gradient: LinearGradient(colors: downloadGradientColors),
-          barWidth: 5,
+          barWidth: 2,
           isStrokeCapRound: true,
           dotData: const FlDotData(show: false),
           belowBarData: BarAreaData(
