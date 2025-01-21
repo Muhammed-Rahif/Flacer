@@ -5,18 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "flacer",
+      "name": "Flacer",
       "request": "launch",
       "type": "dart"
     },
     {
-      "name": "flacer (profile mode)",
+      "name": "Flacer (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "flacer (release mode)",
+      "name": "Flacer (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"

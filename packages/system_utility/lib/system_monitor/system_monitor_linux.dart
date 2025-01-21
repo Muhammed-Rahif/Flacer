@@ -1,6 +1,8 @@
 import 'dart:io';
 import './system_monitor.dart';
 
+// TODO: https://github.com/oguzhaninan/Stacer/blob/native/stacer-core/Info/memory_info.cpp#L10-L18
+
 class SystemMonitorLinux extends SystemMonitor {
   @override
   int get totalRAM {

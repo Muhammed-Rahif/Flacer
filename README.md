@@ -1,4 +1,4 @@
-# flacer
+# Flacer
 
 A new Flutter project.
 
