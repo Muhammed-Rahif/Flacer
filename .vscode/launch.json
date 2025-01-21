@@ -1,0 +1,45 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "flacer",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "flacer (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "flacer (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "system_utility",
+      "cwd": "packages/system_utility",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "system_utility (profile mode)",
+      "cwd": "packages/system_utility",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "system_utility (release mode)",
+      "cwd": "packages/system_utility",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    }
+  ]
+}
